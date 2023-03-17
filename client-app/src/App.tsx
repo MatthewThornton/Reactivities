@@ -9,9 +9,8 @@ function App() {
 
   React.useEffect(() => {
     axios.get("http://localhost:4999/api/activities").then((response) => {
-      console.log(response);
       setActivities(response.data);
-    });
+    }) 
   }, []);
 
   return (
@@ -22,7 +21,7 @@ function App() {
           <ListItem key={activity.id}>{activity.title}</ListItem>
         ))}
       </List>
-    </>
+    </> 
   );
 }
 
