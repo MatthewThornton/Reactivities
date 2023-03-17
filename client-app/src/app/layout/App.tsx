@@ -1,23 +1,24 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import axios from "axios";
 import { Header, ListItem, List } from "semantic-ui-react";
+import { IActivity } from "../models/activities";
+import NavBar from "./NavBar";
+
 
 function App() {
-  const [activities, setActivities] = React.useState([]);
+  const [activities, setActivities] = React.useState<IActivity[]>([]);
 
   React.useEffect(() => {
-    axios.get("http://localhost:4999/api/activities").then((response) => {
+    axios.get<IActivity[]>("http://localhost:4999/api/activities").then((response) => {
       setActivities(response.data);
     }) 
   }, []);
 
   return (
     <>
-      <Header as="h2" icon="users" content="Reactivites" />
+      <NavBar />
       <List>
-        {activities.map((activity: any) => (
+        {activities.map((activity: IActivity) => (
           <ListItem key={activity.id}>{activity.title}</ListItem>
         ))}
       </List>
