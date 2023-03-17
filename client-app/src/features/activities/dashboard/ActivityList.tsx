@@ -4,6 +4,7 @@ import { IActivity } from "../../../app/models/activities";
 
 interface IOwnProps {
   activities: IActivity[];
+  selectActivity: (id: string) => void;
 }
 
 const ActivityList = (props: IOwnProps) => {
@@ -22,7 +23,10 @@ const ActivityList = (props: IOwnProps) => {
                         <div>{activity.city}, {activity.venue}</div>
                     </Item.Description>
                     <Item.Extra>
-                        <Button floated="right" content="View" color="blue" />
+                        <Button 
+                            floated="right" content="View" color="blue" 
+                            onClick={() => props.selectActivity(activity.id)}
+                        />
                         <Label basic content={activity.category} />
                     </Item.Extra>
                 </Item.Content>

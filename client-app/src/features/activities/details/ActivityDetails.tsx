@@ -3,10 +3,11 @@ import { Card, Button, Image } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activities";
 
 interface IOwnProps {
-    activity: IActivity
+    activity: IActivity | undefined;
+    cancelSelectedActivity: () => void;
 }
 
-const ActivityDetails = ({activity}: IOwnProps) => {
+const ActivityDetails = ({activity, cancelSelectedActivity}: IOwnProps) => {
   if (!activity) {
     return <></>;
   }
@@ -26,7 +27,9 @@ const ActivityDetails = ({activity}: IOwnProps) => {
         <Card.Content extra>
           <Button.Group widths={2}>
             <Button basic color="blue" content="Edit" />
-            <Button basic color="grey" content="Cancel" />
+            <Button basic color="grey" content="Cancel"
+                onClick={cancelSelectedActivity}
+            />
           </Button.Group>
         </Card.Content>
       </Card>
