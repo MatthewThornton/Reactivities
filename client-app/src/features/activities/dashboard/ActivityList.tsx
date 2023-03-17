@@ -7,6 +7,7 @@ interface IOwnProps {
 }
 
 const ActivityList = (props: IOwnProps) => {
+  
   return (
     <>
       <Segment>
