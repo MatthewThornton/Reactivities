@@ -1,10 +1,11 @@
 import React from "react";
-import axios from "axios";
+import agent from "../api/agent";
 import { Container } from "semantic-ui-react";
-import { IActivity } from "../models/activities";
+import { IActivity } from "../models/activitiy";
 import NavBar from "./NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import { v4 as uuid } from "uuid";
+import LoadingComponent from "./LoadingComponent";
 
 function App() {
   const [activities, setActivities] = React.useState<IActivity[]>([]);
@@ -12,12 +13,18 @@ function App() {
     IActivity | undefined
   >(undefined);
   const [editMode, setEditMode] = React.useState(false);
+  const [ loading, setLoading ] = React.useState(true);
 
   React.useEffect(() => {
-    axios
-      .get<IActivity[]>("http://localhost:4999/api/activities")
+      agent.Activities.list()
       .then((response) => {
-        setActivities(response.data);
+        let activities: IActivity[] = [];
+        response.forEach((activity) => { 
+          activity.date = activity.date.split("T")[0];
+          activities.push(activity);
+        })
+        setActivities(activities);
+        setLoading(false);
       });
   }, []);
 
@@ -52,6 +59,8 @@ function App() {
   function handleDeleteActivity(id: string) {
     setActivities([...activities.filter((x) => x.id !== id)]);
   }
+
+  if (loading) return <LoadingComponent content="Loading app..." />
 
   return (
     <>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Segment, Button } from "semantic-ui-react";
-import { IActivity } from "../../../app/models/activities";
+import { IActivity } from "../../../app/models/activitiy";
 
 interface IOwnProps { 
     activity: IActivity | undefined;
