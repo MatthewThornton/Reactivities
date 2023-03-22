@@ -7,13 +7,15 @@ interface IOwnProps {
     editMode: boolean;
     closeForm: () => void;
     createOrEdit: (activity: IActivity) => void;
+    submitting: boolean;
 }
 
 const ActivityForm = ({
     activity: selectedActivity,
     editMode,
     closeForm,
-    createOrEdit
+    createOrEdit,
+    submitting
 }: IOwnProps) => { 
 
     const initialFormState: IActivity = selectedActivity ?? {
@@ -48,7 +50,7 @@ const ActivityForm = ({
                 <Form.Input placeholder="Category" value={activity.category} name={'category'} onChange={handleInputChange} /> 
                 <Form.Input type="date" placeholder="Date" value={activity.date} name={'date'} onChange={handleInputChange}  />
                 <Form.Input placeholder="City" value={activity.city} name={'city'} onChange={handleInputChange}  />
-                <Form.Input placeholder="Venue" value={activity.venue} name={'venue'} onChange={handleInputChange}  />
+                <Form.Input loading={submitting} placeholder="Venue" value={activity.venue} name={'venue'} onChange={handleInputChange}  />
                 <Button floated="right" positive  type="submit" content="submit" />
                 <Button 
                     floated="right" 

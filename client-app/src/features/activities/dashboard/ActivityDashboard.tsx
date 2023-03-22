@@ -15,6 +15,7 @@ interface IOwnProps {
   closeForm: () => void;
   createOrEdit: (activity: IActivity) => void;
   deleteActivity: (id: string) => void;
+  submitting: boolean;
 }
 
 const ActivityDashboard = ({
@@ -27,6 +28,7 @@ const ActivityDashboard = ({
   closeForm,
   createOrEdit,
   deleteActivity,
+  submitting,
 }: IOwnProps) => {
   return (
     <>
@@ -53,6 +55,7 @@ const ActivityDashboard = ({
               editMode={editMode}
               closeForm={closeForm}
               createOrEdit={createOrEdit}
+              submitting={submitting}
             />
           )}
         </Grid.Column>
