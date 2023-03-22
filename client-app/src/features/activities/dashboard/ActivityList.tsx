@@ -5,6 +5,7 @@ import { IActivity } from "../../../app/models/activities";
 interface IOwnProps {
   activities: IActivity[];
   selectActivity: (id: string) => void;
+  deleteActivity: (id: string) => void;
 }
 
 const ActivityList = (props: IOwnProps) => {
@@ -26,6 +27,10 @@ const ActivityList = (props: IOwnProps) => {
                         <Button 
                             floated="right" content="View" color="blue" 
                             onClick={() => props.selectActivity(activity.id)}
+                        />
+                        <Button 
+                            floated="right" content="Delete" color="red" 
+                            onClick={() => props.deleteActivity(activity.id)}
                         />
                         <Label basic content={activity.category} />
                     </Item.Extra>

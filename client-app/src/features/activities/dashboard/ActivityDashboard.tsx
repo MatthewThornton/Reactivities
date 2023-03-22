@@ -14,6 +14,7 @@ interface IOwnProps {
   openForm: (id: string) => void;
   closeForm: () => void;
   createOrEdit: (activity: IActivity) => void;
+  deleteActivity: (id: string) => void;
 }
 
 const ActivityDashboard = ({
@@ -24,7 +25,8 @@ const ActivityDashboard = ({
   editMode,
   openForm,
   closeForm,
-  createOrEdit
+  createOrEdit,
+  deleteActivity,
 }: IOwnProps) => {
   return (
     <>
@@ -33,6 +35,7 @@ const ActivityDashboard = ({
           <ActivityList
             activities={activities}
             selectActivity={selectActivity}
+            deleteActivity={deleteActivity}
           />
         </Grid.Column>
         <Grid.Column width={6}>
