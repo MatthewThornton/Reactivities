@@ -6,10 +6,17 @@ interface IOwnProps {
   activities: IActivity[];
   selectActivity: (id: string) => void;
   deleteActivity: (id: string) => void;
+  submitting: boolean;
 }
 
 const ActivityList = (props: IOwnProps) => {
-  
+  const [ target, setTarget ] = React.useState('');
+
+  function handleActivityDelete(e: React.SyntheticEvent<HTMLButtonElement>, id: string) {
+    setTarget(e.currentTarget.name);
+    props.deleteActivity(id);
+  }
+
   return (
     <>
       <Segment>
@@ -28,9 +35,11 @@ const ActivityList = (props: IOwnProps) => {
                             floated="right" content="View" color="blue" 
                             onClick={() => props.selectActivity(activity.id)}
                         />
-                        <Button 
+                        <Button   
+                            name={activity.id}
                             floated="right" content="Delete" color="red" 
-                            onClick={() => props.deleteActivity(activity.id)}
+                            onClick={(e) => handleActivityDelete(e, activity.id)}
+                            loading={props.submitting && target === activity.id}
                         />
                         <Label basic content={activity.category} />
                     </Item.Extra>
