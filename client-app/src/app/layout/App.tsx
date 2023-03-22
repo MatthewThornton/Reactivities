@@ -1,13 +1,16 @@
 import React from "react";
 import axios from "axios";
-import { Header, ListItem, List, Container } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 import { IActivity } from "../models/activities";
 import NavBar from "./NavBar";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 
 function App() {
   const [activities, setActivities] = React.useState<IActivity[]>([]);
-  const [ selectedActivity, setSelectedActivity ] = React.useState<IActivity | undefined>(undefined);
+  const [selectedActivity, setSelectedActivity] = React.useState<
+    IActivity | undefined
+  >(undefined);
+  const [editMode, setEditMode] = React.useState(false);
 
   React.useEffect(() => {
     axios
@@ -18,22 +21,46 @@ function App() {
   }, []);
 
   function handleSelectActivity(id: string) {
-    setSelectedActivity(activities.find(x => x.id === id));
+    setSelectedActivity(activities.find((x) => x.id === id));
   }
 
-  function handleCancelSelectActivity() { 
+  function handleCancelSelectActivity() {
     setSelectedActivity(undefined);
+  }
+
+  function handleFormOpen(id?: string) {
+    id ? handleSelectActivity(id) : handleCancelSelectActivity();
+    setEditMode(true);
+  }
+
+  function handleFormClose() {
+    setEditMode(false);
+  }
+
+  function handleCreateOrEditActivity(activity: IActivity) {
+    activity.id
+      ? setActivities([
+          ...activities.filter((x) => x.id !== activity.id),
+          activity,
+        ])
+      : setActivities([...activities, activity]);
+    setEditMode(false);
+    setSelectedActivity(activity);
   }
 
   return (
     <>
-      <NavBar />
+      <NavBar openForm={handleFormOpen} />
       <Container style={{ marginTop: "7em" }}>
-        <ActivityDashboard 
-          activities={activities} 
+        <ActivityDashboard
+          activities={activities}
           selectedActivity={selectedActivity}
           selectActivity={handleSelectActivity}
           cancelSelectActivity={handleCancelSelectActivity}
+          editMode={editMode}
+          openForm={handleFormOpen}
+          closeForm={handleFormClose}
+          createOrEdit={handleCreateOrEditActivity}
         />
       </Container>
     </>
