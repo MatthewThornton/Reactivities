@@ -1,27 +1,24 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Segment, Item, Button, Label } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activitiy";
+import { useStore } from "../../../app/stores/store";
 
-interface IOwnProps {
-  activities: IActivity[];
-  selectActivity: (id: string) => void;
-  deleteActivity: (id: string) => void;
-  submitting: boolean;
-}
-
-const ActivityList = (props: IOwnProps) => {
+const ActivityList = () => {
   const [ target, setTarget ] = React.useState('');
+  const { activityStore } = useStore();
+  const { loading, deleteActivity} = activityStore;
 
   function handleActivityDelete(e: React.SyntheticEvent<HTMLButtonElement>, id: string) {
     setTarget(e.currentTarget.name);
-    props.deleteActivity(id);
+    deleteActivity(id);
   }
 
   return (
     <>
       <Segment>
         <Item.Group divided>
-          {props.activities.map((activity: IActivity) => (
+          {activityStore.activities.map((activity: IActivity) => (
             <Item key={activity.id}>
                 <Item.Content>
                     <Item.Header as="a">{activity.title}</Item.Header>
@@ -33,13 +30,13 @@ const ActivityList = (props: IOwnProps) => {
                     <Item.Extra>
                         <Button 
                             floated="right" content="View" color="blue" 
-                            onClick={() => props.selectActivity(activity.id)}
+                            onClick={() => activityStore.selectActivity(activity.id)}
                         />
                         <Button   
                             name={activity.id}
                             floated="right" content="Delete" color="red" 
                             onClick={(e) => handleActivityDelete(e, activity.id)}
-                            loading={props.submitting && target === activity.id}
+                            loading={loading && target === activity.id}
                         />
                         <Label basic content={activity.category} />
                     </Item.Extra>
@@ -51,4 +48,4 @@ const ActivityList = (props: IOwnProps) => {
     </>
   );
 };
-export default ActivityList;
+export default observer(ActivityList);

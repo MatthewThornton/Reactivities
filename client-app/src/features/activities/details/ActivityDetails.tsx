@@ -1,20 +1,15 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Card, Button, Image } from "semantic-ui-react";
-import { IActivity } from "../../../app/models/activitiy";
+import { useStore } from "../../../app/stores/store";
 
-interface IOwnProps {
-  activity: IActivity;
-  cancelSelectedActivity: () => void;
-  openForm: (id: string) => void;
-  editMode: boolean;
-}
+const ActivityDetails = () => {
 
-const ActivityDetails = ({
-  activity,
-  cancelSelectedActivity,
-  openForm,
-  editMode
-}: IOwnProps) => {
+  const { activityStore } = useStore();
+  const { selectedActivity: activity, openForm, cancelSelectedActivity } = activityStore;
+
+  if (!activity) return <></>;
+
   return (
     <>
       <Card fluid>
@@ -46,4 +41,4 @@ const ActivityDetails = ({
     </>
   );
 };
-export default ActivityDetails;
+export default observer(ActivityDetails);

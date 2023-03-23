@@ -1,22 +1,14 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Form, Segment, Button } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activitiy";
+import { useStore } from "../../../app/stores/store";
 
-interface IOwnProps { 
-    activity: IActivity | undefined;
-    editMode: boolean;
-    closeForm: () => void;
-    createOrEdit: (activity: IActivity) => void;
-    submitting: boolean;
-}
 
-const ActivityForm = ({
-    activity: selectedActivity,
-    editMode,
-    closeForm,
-    createOrEdit,
-    submitting
-}: IOwnProps) => { 
+const ActivityForm = () => { 
+
+    const { activityStore } = useStore();
+    const { selectedActivity, closeForm, createActivity, updateActivity, loading } = activityStore;
 
     const initialFormState: IActivity = selectedActivity ?? {
         id: '',
@@ -31,7 +23,7 @@ const ActivityForm = ({
     const [activity, setActivity] = React.useState<IActivity>(initialFormState);
 
     function handleSubmit() {
-        createOrEdit(activity);
+        activity.id ? updateActivity(activity) : createActivity(activity);
     }
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -39,9 +31,6 @@ const ActivityForm = ({
         setActivity({...activity, [name]: value});
     }
 
-    // Think through this pattern. Maybe it doesn't make sense. The hook doesn't set before the undefined return check.
-    console.log("ActivityForm.tsx: selectedActivity: ", selectedActivity);
-    console.log("ActivityForm.tsx: activity: ", activity);
     return (<>
         <Segment clearing>
             <Form onSubmit={handleSubmit} autoComplete='off'>
@@ -50,7 +39,7 @@ const ActivityForm = ({
                 <Form.Input placeholder="Category" value={activity.category} name={'category'} onChange={handleInputChange} /> 
                 <Form.Input type="date" placeholder="Date" value={activity.date} name={'date'} onChange={handleInputChange}  />
                 <Form.Input placeholder="City" value={activity.city} name={'city'} onChange={handleInputChange}  />
-                <Form.Input loading={submitting} placeholder="Venue" value={activity.venue} name={'venue'} onChange={handleInputChange}  />
+                <Form.Input loading={loading} placeholder="Venue" value={activity.venue} name={'venue'} onChange={handleInputChange}  />
                 <Button floated="right" positive  type="submit" content="submit" />
                 <Button 
                     floated="right" 
@@ -62,4 +51,4 @@ const ActivityForm = ({
         </Segment>
     </>)
 }
-export default ActivityForm;
+export default observer(ActivityForm);
