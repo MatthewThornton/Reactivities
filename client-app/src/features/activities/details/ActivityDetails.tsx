@@ -1,44 +1,40 @@
 import { observer } from "mobx-react-lite";
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Button, Image } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
+import { Link, useParams } from "react-router-dom";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 const ActivityDetails = () => {
+  const {activityStore} = useStore();
+  const {selectedActivity: activity, loadActivity, loadingInitial} = activityStore;
+  const {id} = useParams();
 
-  const { activityStore } = useStore();
-  const { selectedActivity: activity, openForm, cancelSelectedActivity } = activityStore;
+  useEffect(() => {
+      if (id) loadActivity(id);
+  }, [id, loadActivity])
 
-  if (!activity) return <></>;
+  if (loadingInitial || !activity) return <LoadingComponent />;
 
   return (
-    <>
       <Card fluid>
-        <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
-        <Card.Content>
-          <Card.Header>{activity.title}</Card.Header>
-          <Card.Meta>
-            <span>{activity.date}</span>
-          </Card.Meta>
-          <Card.Description>{activity.description}</Card.Description>
-        </Card.Content>
-        <Card.Content extra>
-          <Button.Group widths={2}>
-            <Button
-              basic
-              color="blue"
-              content="Edit"
-              onClick={() => openForm(activity.id)}
-            />
-            <Button
-              basic
-              color="grey"
-              content="Cancel"
-              onClick={cancelSelectedActivity}
-            />
-          </Button.Group>
-        </Card.Content>
+          <Image src={`/assets/categoryImages/${activity.category}.jpg`} />
+          <Card.Content>
+              <Card.Header>{activity.title}</Card.Header>
+              <Card.Meta>
+                  <span>{activity.date}</span>
+              </Card.Meta>
+              <Card.Description>
+                  {activity.description}
+              </Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+              <Button.Group widths='2'>
+                  <Button as={Link} to={`/manage/${activity.id}`} basic color='blue' content='Edit' />
+                  <Button as={Link} to='/activities' basic color='grey' content='Cancel' />
+              </Button.Group>
+          </Card.Content>
       </Card>
-    </>
-  );
+    )
 };
 export default observer(ActivityDetails);

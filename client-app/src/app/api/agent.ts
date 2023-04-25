@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IActivity } from "../models/activitiy";
+import { Activity } from "../models/activitiy";
 
 const sleep = (delay: number) => { 
     return new Promise((resolve) => {
@@ -29,10 +29,10 @@ const requests = {
 }
 
 const Activities = { 
-    list: () => requests.get<IActivity[]>('/activities'),
-    details: (id: string) => requests.get<IActivity>(`/activities/${id}`),
-    create: (activity: IActivity) => requests.post<void>('/activities', activity),
-    update: (activity: IActivity) => requests.put<void>(`/activities/${activity.id}`, activity),
+    list: () => requests.get<Activity[]>('/activities'),
+    details: (id: string) => requests.get<Activity>(`/activities/${id}`),
+    create: (activity: Activity) => requests.post<void>('/activities', activity),
+    update: (activity: Activity) => requests.put<void>(`/activities/${activity.id}`, activity),
     delete: (id: string) => requests.del<void>(`/activities/${id}`),
 }
 
